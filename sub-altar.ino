@@ -18,7 +18,7 @@
 void TempleInit()
 {
   // has2wifi.Setup("KT_GiGA_6C64", "ed46zx1198");                     j// 와이파이 세팅
-  has2wifi.Setup("badland");
+  has2wifi.Setup("badland_auto", "Code3824@");
   ota.setLogStream(Serial);
   ota.setOnSuccess([]() {
     has2wifi.Send((String)(const char *)my["device_name"], "device_state", "setting");

@@ -46,7 +46,7 @@ void DataChange()
         return;
     }
 
-    static StaticJsonDocument<2048> cur;
+    static StaticJsonDocument<1000> cur;
 
     String cmd;
 
