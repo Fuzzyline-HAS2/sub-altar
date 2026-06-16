@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2022
  */
 
-#define FIRMWARE_VER 3
+#define FIRMWARE_VER 4
 #include "sub-altar.h"
 
 //************************************************ Core1 ********************************************************************
@@ -17,8 +17,7 @@
  */
 void TempleInit()
 {
-  // has2wifi.Setup("KT_GiGA_6C64", "ed46zx1198");                     j// 와이파이 세팅
-  has2wifi.Setup("badland_auto", "Code3824@");
+  has2wifi.Setup("badland");
   ota.setLogStream(Serial);
   ota.setOnSuccess([]() {
     has2wifi.Send((String)(const char *)my["device_name"], "device_state", "setting");
