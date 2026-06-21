@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2022
  */
 
-#define FIRMWARE_VER 13
+#define FIRMWARE_VER 14
 #include "sub-altar.h"
 
 //************************************************ Core1 ********************************************************************
