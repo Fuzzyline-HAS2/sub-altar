@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2022
  */
 
-#define FIRMWARE_VER 8
+#define FIRMWARE_VER 9
 #include "sub-altar.h"
 
 //************************************************ Core1 ********************************************************************
@@ -18,6 +18,8 @@
 void TempleInit()
 {
   has2wifi.Setup("badland");
+  LogMemoryStats("Wi-Fi connected");
+  BleAdvertiserInit();
   ota.setLogStream(Serial);
   ota.setOnSuccess([]() {
     has2wifi.Send((String)(const char *)my["device_name"], "device_state", "setting");
@@ -39,6 +41,7 @@ void setup()
 {
   delay(1000);
   Serial.begin(115200);
+  LogMemoryStats("boot");
   TempleInit();
   DataChange();
   NextionInit();
