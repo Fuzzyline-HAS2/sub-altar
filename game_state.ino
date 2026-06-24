@@ -19,7 +19,8 @@ void ReadyFunc()
 {
     activate_bool = false;
     sendCommand("page pgInfo");
-    NeoFunc = NeoBeforeTagger;
+    NeopixelSet(red);   // ready - 네오픽셀 전체 빨간색(고정)
+    NeoFunc = NeoNo;    // 호흡 애니메이션 없음
 }
 
 /**
@@ -84,7 +85,8 @@ void DataChange()
         {
             altar_used_local = false;   // 제단 재활성화 → 로컬 잠금 해제(다음 봉헌 허용)
             sendCommand("page pgChipCount");
-            NeoFunc = NeoGaming;
+            NeopixelSet(purple);   // activate - 네오픽셀 전체 보라색(고정)
+            NeoFunc = NeoNo;       // 호흡 애니메이션 없음
         }
         else if ((String)(const char *)my["device_state"] == "used")
         {
@@ -108,7 +110,8 @@ void DataChange()
         {
             if (rfid_tag) return;
             sendCommand("page pgAltarTag");
-            NeoFunc = NeoTagger;
+            NeopixelSet(red);   // blink - 네오픽셀 전체 빨간색(고정)
+            NeoFunc = NeoNo;    // 호흡 애니메이션 없음
         }
         else if ((String)(const char *)my["device_state"] == "github")
         {
