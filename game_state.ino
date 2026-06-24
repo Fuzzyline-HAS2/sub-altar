@@ -40,7 +40,10 @@ void ActivateRunOnce()
 
 void DataChange()
 {
-    if (!(const char *)my["device_name"])
+    const char *device_name = (const char *)my["device_name"];
+    BleAdvertiserUpdateFromDeviceName(device_name);
+
+    if (!device_name)
     {
         Serial.println("[DataChange] 서버 데이터 없음, 스킵");
         return;
@@ -79,8 +82,17 @@ void DataChange()
     {
         if ((String)(const char *)my["device_state"] == "activate")
         {
+            altar_used_local = false;   // 제단 재활성화 → 로컬 잠금 해제(다음 봉헌 허용)
             sendCommand("page pgChipCount");
             NeoFunc = NeoGaming;
+        }
+        else if ((String)(const char *)my["device_state"] == "used")
+        {
+            // 현재 페이지가 pgUsed 가 아니면 강제 전환 (Nextion 내부 타이머 누락 대비)
+            if (NextionGetNum("get dp") != PG_USED_ID)
+                sendCommand("page pgUsed");
+            NeopixelSet(red);   // 칩 사용됨 - 네오픽셀 전체 빨간색
+            NeoFunc = NeoNo;    // 애니메이션 정지(빨간색 고정 유지)
         }
         else if ((String)(const char *)my["device_state"] == "player_win")
         {
@@ -106,15 +118,14 @@ void DataChange()
 
     if((int)my["taken_chip"] != (int)cur["taken_chip"])
     {
+        // 전역변수 갱신만 하면 pgUsed가 자동으로 받아서 표시.
+        // 페이지 전환은 Nextion 내부 타이머가 담당.
         cmd = "pgChipCount.vSacrificeChip.val=" + (String)(int)my["taken_chip"];
         sendCommand(cmd.c_str());
-        // 타이머가 이미 만료된 경우(서버 응답이 2초 이후) 페이지 전환
-        if (!keep_tag_timer.isEnabled(keep_tag_timer_id))
-            sendCommand("page pgChipCount");
     }
-    if((int)my["max_taken_chip"] != (int)cur["max_taken_chip"])
+    if((int)my["max_chip"] != (int)cur["max_chip"])
     {
-        cmd = "pgChipCount.vMaxChip.val=" + (String)(int)my["max_taken_chip"];
+        cmd = "pgChipCount.vMaxChip.val=" + (String)(int)my["max_chip"];
         sendCommand(cmd.c_str());
     }
     SyncLanguage();

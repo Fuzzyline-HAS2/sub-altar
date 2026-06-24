@@ -9,10 +9,10 @@ void TimerInit()
  */
 void TimerRun()
 {
+  BleAdvertiserMaintain();
   rfid_timer.run();
   nsec_tag_timer.run();
   wifi_timer.run();
-  keep_tag_timer.run();
 }
 
 /**
@@ -39,9 +39,4 @@ void NsecTagTimerSuccessFunc()
 {
   Serial.println("태그 성공 후 2초");
   nsec_tag_num = 0;
-}
-
-void KeepTagTimerFunc()
-{
-  sendCommand("page pgChipCount");
 }

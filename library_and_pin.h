@@ -10,11 +10,10 @@
 #include <HAS2_Wifi.h>
 
 #include <Adafruit_NeoPixel.h>
-#include <Nextion.h>
 #include <Adafruit_PN532.h>
 
 #include <SimpleTimer.h>
-#include <esp_task_wdt.h>
+#include <esp_bt.h>
 
 #include <SecureOTA.h>
 #include "secrets.h"

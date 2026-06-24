@@ -1,5 +1,22 @@
 #include "sub-altar.h"
 
+void nexInit()
+{
+}
+
+void sendCommand(const char *cmd)
+{
+    if (cmd == nullptr)
+    {
+        return;
+    }
+
+    MySerial2.print(cmd);
+    MySerial2.write(0xFF);
+    MySerial2.write(0xFF);
+    MySerial2.write(0xFF);
+}
+
 /**
  * @brief 디스플레이에 변화를 주거나 변화가 있을시 실행
  */
