@@ -9,6 +9,7 @@
  */
 
 #define FIRMWARE_VER 20
+#define PARTITION_VER 1
 #include "sub-altar.h"
 
 //************************************************ Core1 ********************************************************************
@@ -27,6 +28,12 @@ void TempleInit()
   ota.setOnSkip([]() {
     has2wifi.Send((String)(const char *)my["device_name"], "device_state", "setting");
   });
+    ota.setPartitionUpdate(
+        "https://raw.githubusercontent.com/Fuzzyline-HAS2/sub-altar/main/partitions.bin",
+        "https://raw.githubusercontent.com/Fuzzyline-HAS2/sub-altar/main/partitions.sig",
+        "https://raw.githubusercontent.com/Fuzzyline-HAS2/sub-altar/main/partition_version.txt",
+        PARTITION_VER
+    );
   nexInit();                                                         // 디스플레이 세팅
   MySerial2.begin(9600, SERIAL_8N1, SERIAL2_RX_PIN, SERIAL2_TX_PIN); // 디스플레이 세팅
   SensorInit();                                                      // IoT Glove 사용 센서, 모듈 세팅
