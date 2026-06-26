@@ -8,8 +8,8 @@
  * @copyright Copyright (c) 2022
  */
 
-#define FIRMWARE_VER 20
-#define PARTITION_VER 1
+#define FIRMWARE_VER 21
+#define PARTITION_VER 2
 #include "sub-altar.h"
 
 //************************************************ Core1 ********************************************************************
