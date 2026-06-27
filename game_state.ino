@@ -99,12 +99,14 @@ void DataChange()
         else if ((String)(const char *)my["device_state"] == "player_win")
         {
             sendCommand("page pgTaggerLose");
-            NeoFunc = NeoLose;
+            NeopixelSet(red);   // player_win(=tagger 패배) - 네오픽셀 전체 빨간색(고정)
+            NeoFunc = NeoNo;    // 깜빡임 애니메이션 없음
         }
         else if ((String)(const char *)my["device_state"] == "player_lose")
         {
             sendCommand("page pgTaggerWin");
-            NeoFunc = NeoWin;
+            NeopixelSet(blue);  // player_lose(=tagger 승리) - 네오픽셀 전체 파란색(고정)
+            NeoFunc = NeoNo;    // 깜빡임 애니메이션 없음
         }
         else if ((String)(const char *)my["device_state"] == "blink")
         {

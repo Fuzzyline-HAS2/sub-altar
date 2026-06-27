@@ -100,5 +100,11 @@ void NextionInit()
         has2wifi.Send((String)(const char *)my["device_name"],"nextion_version",String(version));
     }
 
+    // ESP32 펌웨어 버전을 서버 device table 의 esp_version 필드로 보고
+    if ((const char *)my["device_name"])
+    {
+        has2wifi.Send((String)(const char *)my["device_name"], "esp_version", String(FIRMWARE_VER));
+    }
+
     SyncLanguage();
 }
