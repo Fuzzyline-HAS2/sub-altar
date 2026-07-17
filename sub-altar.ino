@@ -9,7 +9,7 @@
  */
 
 #define FIRMWARE_VER 23
-#define PARTITION_VER 4
+#define PARTITION_VER 5
 #include "sub-altar.h"
 
 //************************************************ Core1 ********************************************************************
