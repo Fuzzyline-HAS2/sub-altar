@@ -72,10 +72,21 @@ void RfidLoop()
 void CardChecking(uint8_t rfidData[32]) // 어떤 카드가 들어왔는지 확인용
 {
   String tagUser = "";
-  static String cur_tag_user = "";
   for (int i = 0; i < 4; i++) // GxPx 데이터만 배열에서 추출해서 string으로 저장
     tagUser += (char)rfidData[i];
   Serial.println("tag_user_data : " + tagUser);
+
+  // 잘못 읽힌 카드가 임의의 서버 key로 전송되지 않도록 G#P# 형식을 검증한다.
+  bool valid_tag_user =
+      tagUser.length() == 4 &&
+      tagUser[0] == 'G' && tagUser[1] >= '0' && tagUser[1] <= '9' &&
+      tagUser[2] == 'P' && tagUser[3] >= '0' && tagUser[3] <= '9';
+  if (!valid_tag_user)
+  {
+    Serial.println("[RFID] Invalid tag data (expected G#P#); request skipped");
+    sendCommand("pgCardCheckin.wNoChip.en=1");
+    return;
+  }
 
   // 이미 사용된(used) 제단이면 칩 처리 없이 "사용 불가" 안내만 표시.
   // 서버 반영(device_state="used") 전이라도 로컬 래치(altar_used_local)로 즉시 차단한다.
@@ -86,9 +97,55 @@ void CardChecking(uint8_t rfidData[32]) // 어떤 카드가 들어왔는지 확�
   }
 
   // 1. 태그한 플레이어의 역할과 생명칩갯수, 최대생명칩갯수 등 읽어오기
-  has2wifi.Receive(tagUser);
+  // Receive가 성공 여부를 반환하지 않으므로, 매 시도 전 tag를 비우고
+  // 응답 device_name이 실제 태그값과 같을 때만 성공으로 판정한다.
+  const int tag_lookup_attempts = 3; // 최초 1회 + 재시도 2회
+  const int tag_lookup_retry_delay_ms = 200;
+  bool tag_lookup_succeeded = false;
 
-  if ((String)(const char *)tag["role"] == "tagger" && (int)tag["taken_chip"] > 0)
+  for (int attempt = 1; attempt <= tag_lookup_attempts; attempt++)
+  {
+    tag.clear();
+    Serial.printf("[RFID] Tag lookup attempt %d/%d: %s\n",
+                  attempt, tag_lookup_attempts, tagUser.c_str());
+    has2wifi.Receive(tagUser);
+
+    const char *received_device_name = (const char *)tag["device_name"];
+    if (received_device_name != nullptr && tagUser == received_device_name)
+    {
+      tag_lookup_succeeded = true;
+      Serial.printf("[RFID] Tag lookup success: %s\n", tagUser.c_str());
+      break;
+    }
+
+    if (received_device_name == nullptr || received_device_name[0] == '\0')
+    {
+      Serial.println("[RFID] Tag lookup failed: device_name missing");
+    }
+    else
+    {
+      Serial.printf("[RFID] Tag lookup mismatch: expected=%s, received=%s\n",
+                    tagUser.c_str(), received_device_name);
+    }
+
+    if (attempt < tag_lookup_attempts)
+      delay(tag_lookup_retry_delay_ms);
+  }
+
+  // RX가 모두 실패해도 TX가 살아 있는 경우를 위해 태그값을 대상으로 봉헌을 계속한다.
+  // 조회가 성공한 경우에는 기존처럼 술래이고 taken_chip이 1개 이상일 때만 허용한다.
+  bool can_sacrifice = !tag_lookup_succeeded ||
+                       ((String)(const char *)tag["role"] == "tagger" &&
+                        (int)tag["taken_chip"] > 0);
+
+  if (!tag_lookup_succeeded)
+  {
+    Serial.printf("[RFID][RX FALLBACK] Lookup failed after %d attempts; "
+                  "sacrificing for scanned user %s\n",
+                  tag_lookup_attempts, tagUser.c_str());
+  }
+
+  if (can_sacrifice)
   {
     sendCommand("page pgKeepTag");
 
@@ -109,8 +166,9 @@ void CardChecking(uint8_t rfidData[32]) // 어떤 카드가 들어왔는지 확�
     // taken_chip 반영을 기다리지 말고 즉시 device_state 를 "used" 로 전환한다.
     has2wifi.Send((String)(const char *)my["device_name"], "device_state", "used");
 
-    has2wifi.Send((String)(const char *)tag["device_name"], "taken_chip", "-1");
-    has2wifi.Send((String)(const char *)tag["device_name"], "exp", "+100");
+    // RX 성공/실패와 관계없이 스캔한 RFID 값만 차감/경험치 대상으로 사용한다.
+    has2wifi.Send(tagUser, "taken_chip", "-1");
+    has2wifi.Send(tagUser, "exp", "+100");
 
     pixels_mid.clear();
     pixels_bot.clear();
