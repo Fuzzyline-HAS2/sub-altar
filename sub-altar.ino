@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2022
  */
 
-#define FIRMWARE_VER 23
+#define FIRMWARE_VER 24
 #define PARTITION_VER 5
 #include "sub-altar.h"
 
