@@ -1,4 +1,4 @@
-#include "sub-altar.h"
+#include "HAS1_revival_machine.h"
 
 void TimerInit()
 {

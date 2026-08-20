@@ -1,5 +1,5 @@
 /**
- * @file updated_temple.ino
+ * @file HAS1_revival_machine.ino
  * @author YuBin Kim
  * @brief
  * @version 0.1
@@ -10,7 +10,7 @@
 
 #define FIRMWARE_VER 24
 #define PARTITION_VER 5
-#include "sub-altar.h"
+#include "HAS1_revival_machine.h"
 
 //************************************************ Core1 ********************************************************************
 /**
@@ -19,6 +19,7 @@
 void TempleInit()
 {
   has2wifi.Setup("badland");
+  has2wifi.Send((String)(const char *)my["device_name"], "esp_version", String(FIRMWARE_VER));
   LogMemoryStats("Wi-Fi connected");
   BleAdvertiserInit();
   ota.setLogStream(Serial);
@@ -29,15 +30,13 @@ void TempleInit()
     has2wifi.Send((String)(const char *)my["device_name"], "device_state", "setting");
   });
     ota.setPartitionUpdate(
-        "https://raw.githubusercontent.com/Fuzzyline-HAS2/sub-altar/main/partitions.bin",
-        "https://raw.githubusercontent.com/Fuzzyline-HAS2/sub-altar/main/partitions.sig",
-        "https://raw.githubusercontent.com/Fuzzyline-HAS2/sub-altar/main/partition_version.txt",
+        "https://github.com/Fuzzyline-HAS2/New_HAS1/releases/download/HAS1_revival_machine/partitions.bin",
+        "https://github.com/Fuzzyline-HAS2/New_HAS1/releases/download/HAS1_revival_machine/partitions.sig",
+        "https://github.com/Fuzzyline-HAS2/New_HAS1/releases/download/HAS1_revival_machine/partition_version.txt",
         PARTITION_VER
     );
-  nexInit();                                                         // 디스플레이 세팅
-  MySerial2.begin(9600, SERIAL_8N1, SERIAL2_RX_PIN, SERIAL2_TX_PIN); // 디스플레이 세팅
-  SensorInit();                                                      // IoT Glove 사용 센서, 모듈 세팅
-  TimerInit();                                                       // 타이머 세팅
+  SensorInit();  // IoT Glove 사용 센서, 모듈 세팅
+  TimerInit();   // 타이머 세팅
   
 }
 
@@ -51,7 +50,6 @@ void setup()
   LogMemoryStats("boot");
   TempleInit();
   DataChange();
-  NextionInit();
 }
 
 /**

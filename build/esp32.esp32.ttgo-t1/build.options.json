@@ -1,10 +1,10 @@
 {
-  "additionalFiles": "..\\..\\..,..\\..\\..,..\\..\\..\\..,..\\..\\..\\..,..\\..\\..\\..,..\\..\\..\\..,..\\..\\..\\..,..\\..\\..\\..,..\\..\\..\\..,..\\..\\..\\..,..\\..\\..\\..,..\\..\\..\\..,..\\..\\..\\..,..\\..\\..\\..,..\\..\\..\\..\\..\\..,..\\..\\..\\..\\..\\..,..\\..\\..\\..\\..\\..,..\\..\\..\\..\\..\\..,..\\..\\..\\..\\..\\..,..\\..\\..\\..\\..\\..,..\\..\\..\\..\\..\\..,..\\..\\..\\..\\..\\..,..\\..\\..\\..\\..\\..,..\\..\\..\\..\\..\\..,..\\..,..\\..,..\\..,..\\..,..\\..",
-  "builtInLibrariesFolders": "C:\\Users\\teamh\\AppData\\Local\\Arduino15\\libraries",
+  "additionalFiles": "..\\..\\..,..\\..,..\\..,..\\..,..\\..,..\\..",
+  "builtInLibrariesFolders": "C:\\ArduinoData\\libraries",
   "compiler.optimization_flags": "-Os",
   "customBuildProperties": "",
-  "fqbn": "esp32:esp32:ttgo-t1:UploadSpeed=921600,CPUFreq=240,FlashFreq=80,FlashMode=qio,FlashSize=4M,PartitionScheme=default,DebugLevel=none,EraseFlash=none",
-  "hardwareFolders": "C:\\Users\\teamh\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\3.3.8,C:\\Users\\teamh\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\3.3.8",
-  "otherLibrariesFolders": "C:\\Users\\teamh\\OneDrive\\문서\\Arduino\\libraries",
-  "sketchLocation": "C:\\Users\\teamh\\OneDrive\\바탕 화면\\CODE\\sub-altar"
+  "fqbn": "esp32:esp32:ttgo-t1:UploadSpeed=115200,CPUFreq=240,FlashFreq=80,FlashMode=qio,FlashSize=4M,PartitionScheme=min_spiffs,DebugLevel=none,EraseFlash=all",
+  "hardwareFolders": "C:\\ArduinoData\\packages\\esp32\\hardware\\esp32\\3.3.11,C:\\ArduinoData\\packages\\esp32\\hardware\\esp32\\3.3.11",
+  "otherLibrariesFolders": "c:\\ArduinoSketchbook\\libraries",
+  "sketchLocation": "C:\\Users\\이효주\\Hide_and_Seek\\sub-altar"
 }

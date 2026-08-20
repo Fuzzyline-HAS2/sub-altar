@@ -1,9 +1,9 @@
-# sub-altar
+# HAS1_revival_machine
 
 ## HAS3 BLE Beacon Build
 
 HAS3 BLE advertising now fits in the default TTGO-T1 OTA partition. Keep the
-existing partition scheme when updating already-deployed sub-altar devices.
+existing partition scheme when updating already-deployed HAS1_revival_machine devices.
 
 ```text
 Board = TTGO T1

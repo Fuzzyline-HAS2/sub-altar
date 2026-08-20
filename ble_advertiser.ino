@@ -1,4 +1,4 @@
-#include "sub-altar.h"
+#include "HAS1_revival_machine.h"
 #include <esp_bt.h>
 
 // Arduino ESP32 코어는 부팅(initArduino) 시 btInUse()가 false면 BT 컨트롤러
